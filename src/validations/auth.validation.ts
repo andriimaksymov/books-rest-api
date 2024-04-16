@@ -31,6 +31,15 @@ const validateSignup = async (req: Request, res: Response, next: NextFunction) =
   next();
 };
 
+const validateLogin = async (req: Request, res: Response, next: NextFunction) => {
+  const { error } = signupSchema.validate(req.body);
+  if (error) {
+    return res.status(400).json({ message: error.details?.[0]?.message });
+  }
+  next();
+};
+
 export default {
-  validateSignup
+  validateSignup,
+  validateLogin
 };

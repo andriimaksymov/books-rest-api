@@ -3,12 +3,12 @@ import { Request } from 'express';
 
 // Set up storage for uploaded files
 const storage = multer.diskStorage({
-	destination: (req: Request, file: Express.Multer.File, callback: (error: Error | null, filename: string) => void) => {
-		callback(null, 'images');
-	},
-	filename(req: Request, file: Express.Multer.File, callback: (error: Error | null, filename: string) => void) {
-		callback(null, new Date().toISOString() + '-' + file.originalname);
-	},
+  destination: (req: Request, file: Express.Multer.File, callback: (error: Error | null, filename: string) => void) => {
+    callback(null, 'images');
+  },
+  filename(req: Request, file: Express.Multer.File, callback: (error: Error | null, filename: string) => void) {
+    callback(null, new Date().toISOString() + '-' + file.originalname);
+  },
 });
 
 // const fileFilter = (

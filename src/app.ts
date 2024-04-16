@@ -1,7 +1,7 @@
 import express from 'express';
 import * as dotenv from 'dotenv';
 import cors from 'cors';
-// import helmet from 'helmet';
+import helmet from 'helmet';
 import mongoose from 'mongoose';
 
 import authRoutesV1 from './v1/routes/auth.routes';
@@ -19,7 +19,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
-// app.use(helmet());
+app.use(helmet());
 
 if (!process.env.MONGO_DB_URI) {
   throw new Error('No mongo database utl specified...');
