@@ -18,6 +18,14 @@ const signupSchema = Joi.object().keys({
     }),
 });
 
+const forgotPasswordSchema = Joi.object().keys({
+  email: Joi.string().email().required()
+    .messages({
+      'string.email': 'Please enter a valid email address.',
+      'any.required': 'Email is required.'
+    }),
+});
+
 const validateSignup = async (req: Request, res: Response, next: NextFunction) => {
   const { error } = signupSchema.validate(req.body);
   if (error) {
@@ -39,7 +47,16 @@ const validateLogin = async (req: Request, res: Response, next: NextFunction) =>
   next();
 };
 
+const validateForgotPassword = async (req: Request, res: Response, next: NextFunction) => {
+  const { error } = forgotPasswordSchema.validate(req.body);
+  if (error) {
+    return res.status(400).json({ message: error.details?.[0]?.message });
+  }
+  next();
+}
+
 export default {
   validateSignup,
-  validateLogin
+  validateLogin,
+  validateForgotPassword
 };
