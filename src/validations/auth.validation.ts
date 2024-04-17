@@ -26,6 +26,18 @@ const forgotPasswordSchema = Joi.object().keys({
     }),
 });
 
+const resetPasswordSchema = Joi.object().keys({
+  password: Joi.string().pattern(PASSWORD_REGEX).required()
+    .messages({
+      'string.pattern.base': 'Password must be at least 6 characters long. Make sure it includes a mix of uppercase and lowercase letters, numbers, and symbols.',
+      'any.required': 'Password is required.'
+    }),
+  token: Joi.string().required()
+    .messages({
+      'any.required': 'Token is required.'
+    }),
+});
+
 const validateSignup = async (req: Request, res: Response, next: NextFunction) => {
   const { error } = signupSchema.validate(req.body);
   if (error) {
@@ -55,8 +67,17 @@ const validateForgotPassword = async (req: Request, res: Response, next: NextFun
   next();
 }
 
+const validateResetPassword = async (req: Request, res: Response, next: NextFunction) => {
+  const { error } = resetPasswordSchema.validate(req.body);
+  if (error) {
+    return res.status(400).json({ message: error.details?.[0]?.message });
+  }
+  next();
+}
+
 export default {
   validateSignup,
   validateLogin,
-  validateForgotPassword
+  validateForgotPassword,
+  validateResetPassword
 };

@@ -1,7 +1,7 @@
 import { model, Schema } from 'mongoose';
 
 const tokenSchema = new Schema({
-	userId: {
+	user_id: {
 		type: Schema.Types.ObjectId,
 		required: true,
 		ref: 'user',
@@ -10,7 +10,7 @@ const tokenSchema = new Schema({
 		type: String,
 		required: true,
 	},
-	createdAt: {
+	created_at: {
 		type: Date,
 		default: Date.now,
 		expires: 3600,
