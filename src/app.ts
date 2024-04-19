@@ -5,6 +5,7 @@ import helmet from 'helmet';
 import mongoose from 'mongoose';
 
 import authRoutesV1 from './v1/routes/auth.routes';
+import bookRoutesV1 from './v1/routes/books.routes';
 
 dotenv.config();
 
@@ -26,6 +27,7 @@ if (!process.env.MONGO_DB_URI) {
 }
 
 app.use('/api/v1/auth', authRoutesV1);
+app.use('/api/v1/books', bookRoutesV1);
 
 mongoose.connect(process.env.MONGO_DB_URI)
   .then(() => {
