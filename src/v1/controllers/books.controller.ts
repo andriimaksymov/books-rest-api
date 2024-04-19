@@ -21,6 +21,23 @@ const getBooks = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
+const getBook = async (req: Request, res: Response, next: NextFunction) => {
+  const { id } = req.params;
+
+  try {
+    const book = await Book.findById(id);
+    if (book) {
+      return res.status(200).json(book);
+    } else {
+      return res.status(404).json({
+        message: 'Book you are looking for does not exist',
+      });
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
 const postBook = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const book = await new Book({
@@ -37,7 +54,49 @@ const postBook = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
+const updateBook = async (req: Request, res: Response, next: NextFunction) => {
+  const { id } = req.params;
+
+  try {
+    const data = {
+      ...req.body,
+    };
+    const book = await Book.findByIdAndUpdate(id, data, {
+      returnOriginal: false,
+    });
+    if (!book) {
+      return res.status(404).json({ message: 'Book doesn\'t exist', });
+    } else {
+      res.status(200).json(book);
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
+const deleteBook = async (req: Request, res: Response, next: NextFunction) => {
+  const { id } = req.params;
+
+  try {
+    const book = await Book.findById(id);
+    if (!book) {
+      return res.status(404).json({ message: 'Book doesn\'t exist.' });
+    } else {
+      await book.deleteOne();
+      return res.status(200).json({
+        id,
+        message: 'Book was successfully deleted!',
+      });
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
 export default {
+  getBook,
+  getBooks,
   postBook,
-  getBooks
+  updateBook,
+  deleteBook,
 };
