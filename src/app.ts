@@ -29,6 +29,8 @@ if (!process.env.MONGO_DB_URI) {
 app.use('/api/v1/auth', authRoutesV1);
 app.use('/api/v1/books', bookRoutesV1);
 
+app.use('/images', express.static('./images'));
+
 mongoose.connect(process.env.MONGO_DB_URI)
   .then(() => {
     app.listen(PORT, () => {
