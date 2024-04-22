@@ -1,13 +1,11 @@
 import express from 'express';
-import * as dotenv from 'dotenv';
 import cors from 'cors';
 import helmet from 'helmet';
 import mongoose from 'mongoose';
+import 'dotenv/config'
 
 import authRoutesV1 from './v1/routes/auth.routes';
 import bookRoutesV1 from './v1/routes/books.routes';
-
-dotenv.config();
 
 if (!process.env.PORT) {
   console.log('No port value specified...');

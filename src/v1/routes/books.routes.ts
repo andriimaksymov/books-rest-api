@@ -1,9 +1,9 @@
 import { Router } from 'express';
 
 import isAdmin from '../../middlewares/isAdmin';
-import upload from '../../middlewares/upload';
 import booksController from '../controllers/books.controller';
 import booksValidation from '../../validations/books.validation';
+import upload from '../../storage';
 
 const router = Router();
 
