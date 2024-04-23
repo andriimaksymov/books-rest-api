@@ -38,7 +38,7 @@ const getBook = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const postBook = async (req: Request, res: Response, next: NextFunction) => {
+const createBook = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const book = await new Book({
       ...req.body,
@@ -96,7 +96,7 @@ const deleteBook = async (req: Request, res: Response, next: NextFunction) => {
 export default {
   getBook,
   getBooks,
-  postBook,
+  createBook,
   updateBook,
   deleteBook,
 };

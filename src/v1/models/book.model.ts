@@ -20,6 +20,13 @@ const bookSchema = new Schema({
   year: {
     type: String,
   },
+  genres: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Genre',
+      required: true,
+    },
+  ],
   images: [{
     filename: String,
     path: String,
