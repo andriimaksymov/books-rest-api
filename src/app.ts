@@ -6,6 +6,7 @@ import 'dotenv/config'
 
 import authRoutesV1 from './v1/routes/auth.routes';
 import booksRoutesV1 from './v1/routes/books.routes';
+import cartRoutesV1 from './v1/routes/cart.routes';
 import genresRoutesV1 from './v1/routes/genres.routes';
 
 if (!process.env.PORT) {
@@ -27,6 +28,7 @@ if (!process.env.MONGO_DB_URI) {
 
 app.use('/api/v1/auth', authRoutesV1);
 app.use('/api/v1/books', booksRoutesV1);
+app.use('/api/v1/cart', cartRoutesV1);
 app.use('/api/v1/genres', genresRoutesV1);
 
 app.use('/images', express.static('./images'));
