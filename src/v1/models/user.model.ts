@@ -16,11 +16,11 @@ const userSchema = new Schema(
       max: 100,
       select: false,
     },
-    first_name: {
+    firstName: {
       type: String,
       min: 2,
     },
-    last_name: {
+    lastName: {
       type: String,
       min: 2,
     },

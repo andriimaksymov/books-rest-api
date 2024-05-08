@@ -42,7 +42,7 @@ const createBook = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const book = await new Book({
       ...req.body,
-      images: Array.isArray(req.files) ? req.files?.map((file) => ({
+      images: Array.isArray(req.files) ? req.files.map((file) => ({
         filename: file.filename,
         path: file.path
       })) : []

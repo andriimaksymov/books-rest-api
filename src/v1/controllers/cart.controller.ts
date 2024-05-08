@@ -1,13 +1,16 @@
 import { NextFunction, Request, Response } from 'express';
 
+import { ExtendedRequest } from '../../middlewares/isAuth';
 import CartModel from '../models/cart.model';
 import BookModel from '../models/book.model';
+import { ExtendedJwtPayload } from '../../types/jwt';
 
 const getCart = async (req: Request, res: Response, next: NextFunction) => {
-  const { id } = req.params;
+  const extendedReq = req as ExtendedRequest;
+  const token = extendedReq.token as ExtendedJwtPayload;
 
   try {
-    const cart = await CartModel.findById(id);
+    const cart = await CartModel.findOne({ userId: token.userId });
 
     res.status(200).json(cart);
   } catch (err) {
@@ -16,10 +19,10 @@ const getCart = async (req: Request, res: Response, next: NextFunction) => {
 };
 
 const postCart = async (req: Request, res: Response, next: NextFunction) => {
-  const { cart_id, item_id, quantity = 1 } = req.body;
+  const { cart_id, itemId, quantity = 1 } = req.body;
 
   try {
-    const book = await BookModel.findOne({ _id: item_id });
+    const book = await BookModel.findOne({ _id: itemId });
 
     if (!book) {
       return res.status(404).json({ message: 'Book doesn\'t exist' });
@@ -27,7 +30,7 @@ const postCart = async (req: Request, res: Response, next: NextFunction) => {
 
     let cart = await CartModel.findById(cart_id);
     if (cart) {
-      const index = cart.items.findIndex((item) => item._id!.toString() === item_id);
+      const index = cart.items.findIndex((item) => item._id!.toString() === itemId);
       if (index > -1) {
         if (quantity > 0) {
           cart.items[index].quantity = quantity;
@@ -36,7 +39,7 @@ const postCart = async (req: Request, res: Response, next: NextFunction) => {
         }
       } else {
         cart.items.push({
-          id: item_id,
+          id: itemId,
           quantity,
           price: book.price,
         });
@@ -46,7 +49,7 @@ const postCart = async (req: Request, res: Response, next: NextFunction) => {
       cart = new CartModel({
         items: [
           {
-            id: item_id,
+            id: itemId,
             quantity,
             price: book.price,
           },

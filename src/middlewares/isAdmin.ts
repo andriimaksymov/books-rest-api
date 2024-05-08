@@ -38,14 +38,14 @@ const isAdmin = async (req: Request, res: Response, next: NextFunction) => {
 	}
 
 	try {
-		// Find user by user_id extracted from the token
-		const user = await UserModel.findById(data.user_id);
+		// Find user by userIid extracted from the token
+		const user = await UserModel.findById(data.userId);
 		// Check if user exists and is an admin
-		if (user && user.role === 'admin') {
-			next(); // User is an admin, proceed to next middleware
-		} else {
-			res.status(403).send('Forbidden'); // User is not an admin, send forbidden error
+		if (user?.role !== 'admin') {
+			return res.status(403).send({ message: 'Forbidden' }); // User is not an admin, send forbidden error
 		}
+
+		next();
 	} catch (err) {
 		next(err); // Forward error to error handler middleware
 	}

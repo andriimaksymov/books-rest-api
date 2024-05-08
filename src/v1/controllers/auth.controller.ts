@@ -15,7 +15,7 @@ const postSignUp = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const salt = await bcrypt.genSalt(10);
     const password = await bcrypt.hash(req.body.password, salt);
-    const user = await new User({
+    const user = new User({
       email: req.body.email,
       password
     });
@@ -41,8 +41,7 @@ const postLogin = async (req: Request, res: Response, next: NextFunction) => {
     const token = jwt.sign(
       {
         email,
-        user_id: user._id,
-        role: user.role,
+        userId: user._id,
       },
       process.env.JWT_SECRET,
       { expiresIn: '7d' },

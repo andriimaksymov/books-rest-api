@@ -1,11 +1,14 @@
-import jwt, { JwtPayload } from 'jsonwebtoken';
+import jwt, { TokenExpiredError } from 'jsonwebtoken';
 import { NextFunction, Request, Response } from 'express';
 
-export interface CustomRequest extends Request {
-  token: string | JwtPayload;
+import { ExtendedJwtPayload } from '../types/jwt';
+import { verifyToken } from '../utils/jwt';
+
+export interface ExtendedRequest extends Request {
+  token: string | ExtendedJwtPayload;
 }
 
-const isAuth = (req: Request, res: Response, next: NextFunction) => {
+const isAuth = async (req: Request, res: Response, next: NextFunction) => {
   const token = req.header('Authorization')?.replace('Bearer ', '');
 
   if (!process.env.JWT_SECRET) {
@@ -17,10 +20,19 @@ const isAuth = (req: Request, res: Response, next: NextFunction) => {
   }
 
   try {
-    (req as CustomRequest).token = jwt.verify(token, process.env.JWT_SECRET);
+    (req as ExtendedRequest).token = await verifyToken(token, process.env.JWT_SECRET);
     next();
   } catch (err) {
-    next(err);
+    if (err instanceof TokenExpiredError) {
+      // Token has expired
+      return res.status(401).json({ error: 'Token expired' });
+    } else if (err instanceof jwt.JsonWebTokenError) {
+      // Other JWT verification errors
+      return res.status(401).json({ error: 'Invalid token' });
+    } else {
+      // Unexpected errors
+      return res.status(500).json({ error: 'Internal server error' });
+    }
   }
 };
 
